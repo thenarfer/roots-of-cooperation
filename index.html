@@ -1,0 +1,1793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>The Roots of Cooperation | Bašić et al.</title>
+<meta name="description" content="An interactive exploration of how cooperation develops in 929 children aged 3–6. Based on the research by Bašić, Bindra, Glätzle-Rützler, Romano, Sutter & Zoller.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,600&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════
+   CSS CUSTOM PROPERTIES
+   ═══════════════════════════════════════════ */
+:root {
+  --cream: #FAF8F0;
+  --cream-dark: #F0EDE4;
+  --navy: #1a1a2e;
+  --navy-light: #16213e;
+  --coral: #e07a5f;
+  --coral-light: #e8967f;
+  --coral-dark: #c4603f;
+  --teal: #81b29a;
+  --teal-light: #a8d4bc;
+  --teal-dark: #5a8a72;
+  --gold: #f2cc8f;
+  --gold-dark: #d4a84a;
+  --purple: #9b8ec4;
+  --text-dark: #2b2b3a;
+  --text-light: #e8e4dc;
+  --text-muted: #7a7a8a;
+  --font-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --section-pad: clamp(3rem, 8vw, 6rem);
+  --content-max: 720px;
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-back: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ═══════════════════════════════════════════
+   RESET & BASE
+   ═══════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--text-dark);
+  background: var(--cream);
+  line-height: 1.7;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ═══════════════════════════════════════════
+   GRAIN TEXTURE OVERLAY
+   ═══════════════════════════════════════════ */
+.grain {
+  position: fixed;
+  top: -50%; left: -50%;
+  width: 200%; height: 200%;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.028;
+}
+
+/* ═══════════════════════════════════════════
+   TYPOGRAPHY
+   ═══════════════════════════════════════════ */
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1.2;
+}
+h2 {
+  font-size: clamp(1.8rem, 5vw, 2.8rem);
+  margin-bottom: 1rem;
+}
+h3 {
+  font-size: clamp(1.2rem, 3vw, 1.6rem);
+  margin-bottom: 0.75rem;
+}
+p { margin-bottom: 1rem; }
+a { color: var(--coral); text-decoration: none; transition: color 0.2s; }
+a:hover { color: var(--coral-dark); }
+
+.section-label {
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--coral);
+  margin-bottom: 0.75rem;
+  display: block;
+}
+.dark-section .section-label { color: var(--gold); }
+
+/* ═══════════════════════════════════════════
+   LAYOUT
+   ═══════════════════════════════════════════ */
+section {
+  padding: var(--section-pad) clamp(1.25rem, 5vw, 2rem);
+  position: relative;
+}
+.content-wrap {
+  max-width: var(--content-max);
+  margin: 0 auto;
+}
+.dark-section {
+  background: var(--navy);
+  color: var(--text-light);
+}
+
+/* ═══════════════════════════════════════════
+   SCROLL ANIMATIONS
+   ═══════════════════════════════════════════ */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.8s var(--ease-out-expo), transform 0.8s var(--ease-out-expo);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-d1 { transition-delay: 0.1s; }
+.reveal-d2 { transition-delay: 0.2s; }
+.reveal-d3 { transition-delay: 0.3s; }
+.reveal-d4 { transition-delay: 0.4s; }
+.reveal-d5 { transition-delay: 0.5s; }
+
+/* ═══════════════════════════════════════════
+   HERO SECTION
+   ═══════════════════════════════════════════ */
+#hero {
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem 1.5rem;
+  position: relative;
+  overflow: hidden;
+}
+#hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 25% 40%, rgba(129,178,154,0.10) 0%, transparent 55%),
+    radial-gradient(ellipse at 75% 60%, rgba(224,122,95,0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 90%, rgba(242,204,143,0.06) 0%, transparent 40%);
+  animation: heroGlow 10s ease-in-out infinite alternate;
+}
+@keyframes heroGlow {
+  0% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0.7; transform: scale(1.05); }
+}
+
+.hero-counter {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(5rem, 18vw, 11rem);
+  line-height: 1;
+  color: var(--navy);
+  position: relative;
+  z-index: 1;
+  letter-spacing: -0.03em;
+}
+.hero-subtitle {
+  font-family: var(--font-display);
+  font-size: clamp(1.1rem, 3.5vw, 1.6rem);
+  font-weight: 400;
+  font-style: italic;
+  color: var(--text-dark);
+  max-width: 480px;
+  margin: 0.75rem auto 0;
+  line-height: 1.5;
+  position: relative;
+  z-index: 1;
+  opacity: 0;
+  transform: translateY(15px);
+  transition: opacity 1s ease 0.8s, transform 1s ease 0.8s;
+}
+.hero-subtitle.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+.hero-subtitle em {
+  font-style: normal;
+  color: var(--coral);
+  font-weight: 600;
+}
+.hero-authors {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 2rem;
+  letter-spacing: 0.02em;
+  position: relative;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 1s ease 1.4s;
+}
+.hero-authors.show { opacity: 1; }
+.hero-authors span {
+  display: inline;
+  white-space: nowrap;
+}
+
+.scroll-hint {
+  position: absolute;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 1s ease 2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+}
+.scroll-hint.show { opacity: 0.5; }
+.scroll-hint-text {
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.scroll-hint-line {
+  width: 1px;
+  height: 32px;
+  background: var(--text-muted);
+  position: relative;
+  overflow: hidden;
+}
+.scroll-hint-line::after {
+  content: '';
+  position: absolute;
+  top: -100%;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--coral);
+  animation: scrollLine 2s ease-in-out infinite;
+}
+@keyframes scrollLine {
+  0% { top: -100%; }
+  50% { top: 100%; }
+  100% { top: 100%; }
+}
+
+/* ═══════════════════════════════════════════
+   GAME SECTION
+   ═══════════════════════════════════════════ */
+#game {
+  background: var(--cream);
+  padding-bottom: calc(var(--section-pad) + 1rem);
+}
+.game-intro-text {
+  font-size: clamp(1rem, 2.5vw, 1.1rem);
+  color: var(--text-dark);
+  margin-bottom: 1.5rem;
+  line-height: 1.7;
+}
+
+.game-container {
+  background: white;
+  border-radius: 16px;
+  padding: clamp(1.25rem, 4vw, 2rem);
+  box-shadow:
+    0 1px 3px rgba(26,26,46,0.04),
+    0 8px 32px rgba(26,26,46,0.06);
+  position: relative;
+  overflow: hidden;
+  min-height: 380px;
+}
+.game-container::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--teal), var(--coral), var(--gold));
+}
+
+/* Game Header */
+.game-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(26,26,46,0.06);
+}
+.game-round {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.game-scores {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+.game-scores .you { color: var(--teal-dark); }
+.game-scores .partner { color: var(--coral); }
+
+/* Game Stage */
+.game-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 1rem 0;
+}
+
+/* Players visual */
+.game-players {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2.5rem;
+  width: 100%;
+}
+.game-player {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+}
+.game-avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  position: relative;
+}
+.game-avatar.you-avatar {
+  background: linear-gradient(135deg, var(--teal-light), var(--teal));
+  color: white;
+}
+.game-avatar.partner-avatar {
+  background: linear-gradient(135deg, var(--coral-light), var(--coral));
+  color: white;
+}
+.game-player-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.game-vs {
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  font-style: italic;
+  color: var(--text-muted);
+}
+
+/* Choice display bubble */
+.choice-bubble {
+  font-size: 1.3rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 12px;
+  position: absolute;
+  top: -8px; right: -12px;
+  opacity: 0;
+  transform: scale(0);
+  transition: all 0.4s var(--ease-out-back);
+}
+.choice-bubble.show {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Round result */
+.round-result {
+  text-align: center;
+  padding: 0.75rem;
+  border-radius: 12px;
+  background: rgba(26,26,46,0.02);
+  width: 100%;
+  min-height: 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+}
+.round-result-text {
+  font-size: 0.85rem;
+  color: var(--text-dark);
+  font-weight: 500;
+}
+.round-result-stars {
+  font-size: 1.2rem;
+  letter-spacing: 2px;
+}
+.star-pop {
+  display: inline-block;
+  animation: starPop 0.4s var(--ease-out-back) both;
+}
+@keyframes starPop {
+  0% { transform: scale(0) rotate(-20deg); opacity: 0; }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+/* Buttons */
+.game-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  width: 100%;
+}
+.game-btn {
+  padding: 1rem;
+  border: 2px solid transparent;
+  border-radius: 14px;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  position: relative;
+  overflow: hidden;
+}
+.game-btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: currentColor;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+.game-btn:active::after { opacity: 0.08; }
+
+.game-btn-share {
+  background: rgba(129,178,154,0.10);
+  border-color: var(--teal);
+  color: var(--teal-dark);
+}
+.game-btn-share:hover { background: rgba(129,178,154,0.18); }
+.game-btn-keep {
+  background: rgba(224,122,95,0.10);
+  border-color: var(--coral);
+  color: var(--coral-dark);
+}
+.game-btn-keep:hover { background: rgba(224,122,95,0.18); }
+.game-btn-icon { font-size: 1.6rem; line-height: 1; }
+.game-btn-sub {
+  font-size: 0.65rem;
+  font-weight: 400;
+  opacity: 0.7;
+}
+
+.game-btn:disabled {
+  opacity: 0.3;
+  cursor: default;
+  transform: none !important;
+}
+
+/* Game Intro Screen */
+.game-intro {
+  text-align: center;
+  padding: 1.5rem 0;
+}
+.game-intro h3 {
+  font-family: var(--font-display);
+  color: var(--navy);
+  margin-bottom: 0.75rem;
+}
+.game-intro p {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-bottom: 1.25rem;
+  line-height: 1.6;
+}
+.game-start-btn {
+  padding: 0.85rem 2.5rem;
+  border: none;
+  border-radius: 50px;
+  background: var(--navy);
+  color: var(--cream);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.game-start-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(26,26,46,0.2); }
+.game-start-btn:active { transform: translateY(0); }
+
+/* Payoff Matrix */
+.payoff-matrix {
+  display: grid;
+  grid-template-columns: auto 1fr 1fr;
+  grid-template-rows: auto 1fr 1fr;
+  gap: 2px;
+  font-size: 0.7rem;
+  margin: 1rem auto;
+  max-width: 260px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.pm-corner { background: transparent; }
+.pm-header {
+  padding: 0.4rem;
+  text-align: center;
+  font-weight: 600;
+  font-size: 0.65rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.pm-header.col { background: rgba(224,122,95,0.08); color: var(--coral-dark); }
+.pm-header.row { background: rgba(129,178,154,0.08); color: var(--teal-dark); writing-mode: vertical-lr; transform: rotate(180deg); }
+.pm-cell {
+  padding: 0.5rem 0.3rem;
+  text-align: center;
+  background: rgba(26,26,46,0.02);
+  line-height: 1.3;
+  font-size: 0.7rem;
+}
+.pm-cell .you-score { color: var(--teal-dark); font-weight: 600; }
+.pm-cell .partner-score { color: var(--coral); font-weight: 600; }
+
+/* Game Summary Screen */
+.game-summary {
+  text-align: center;
+  padding: 0.5rem 0;
+}
+.game-summary h3 {
+  font-family: var(--font-display);
+  color: var(--navy);
+  margin-bottom: 1rem;
+}
+.summary-rate {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 10vw, 4.5rem);
+  font-weight: 900;
+  color: var(--teal-dark);
+  line-height: 1;
+}
+.summary-rate-label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 1.5rem;
+}
+.summary-compare {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin: 1.25rem 0;
+}
+.summary-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+}
+.summary-bar-label {
+  width: 90px;
+  text-align: right;
+  font-weight: 500;
+  color: var(--text-muted);
+  flex-shrink: 0;
+  font-size: 0.7rem;
+}
+.summary-bar-track {
+  flex: 1;
+  height: 22px;
+  background: rgba(26,26,46,0.04);
+  border-radius: 11px;
+  overflow: hidden;
+  position: relative;
+}
+.summary-bar-fill {
+  height: 100%;
+  border-radius: 11px;
+  transition: width 1s var(--ease-out-expo);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 8px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: white;
+  min-width: 40px;
+}
+.summary-bar-fill.you-bar { background: var(--teal); }
+.summary-bar-fill.control-bar { background: var(--text-muted); opacity: 0.5; }
+.summary-bar-fill.punishment-bar { background: var(--coral); }
+.summary-message {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 0.95rem;
+  color: var(--text-dark);
+  margin-top: 1rem;
+  line-height: 1.5;
+}
+.game-restart-btn {
+  margin-top: 1rem;
+  padding: 0.6rem 1.5rem;
+  border: 1.5px solid var(--navy);
+  border-radius: 50px;
+  background: transparent;
+  color: var(--navy);
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  -webkit-tap-highlight-color: transparent;
+}
+.game-restart-btn:hover {
+  background: var(--navy);
+  color: var(--cream);
+}
+
+/* ═══════════════════════════════════════════
+   EXPERIMENT SECTION (Dark)
+   ═══════════════════════════════════════════ */
+#experiment {
+  background: var(--navy);
+  color: var(--text-light);
+}
+#experiment .section-intro {
+  font-size: clamp(0.95rem, 2.2vw, 1.05rem);
+  color: rgba(232,228,220,0.75);
+  margin-bottom: 2rem;
+  line-height: 1.7;
+}
+
+.condition-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+@media (max-width: 400px) {
+  .condition-grid { grid-template-columns: 1fr; }
+}
+
+.condition-card {
+  border-radius: 12px;
+  padding: clamp(1rem, 3vw, 1.25rem);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+  border: 1px solid rgba(255,255,255,0.06);
+}
+.condition-card:active { transform: scale(0.97); }
+.condition-card.control { background: rgba(255,255,255,0.05); }
+.condition-card.direct { background: rgba(129,178,154,0.12); }
+.condition-card.indirect { background: rgba(155,142,196,0.12); }
+.condition-card.punishment { background: rgba(224,122,95,0.15); }
+.condition-card:hover { border-color: rgba(255,255,255,0.15); }
+
+.condition-icon {
+  font-size: 1.6rem;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+.condition-card h4 {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  color: var(--text-light);
+}
+.condition-n {
+  font-size: 0.65rem;
+  color: rgba(232,228,220,0.4);
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.4rem;
+}
+.condition-desc {
+  font-size: 0.78rem;
+  color: rgba(232,228,220,0.6);
+  line-height: 1.5;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease, opacity 0.3s ease;
+  opacity: 0;
+}
+.condition-card.expanded .condition-desc {
+  max-height: 200px;
+  opacity: 1;
+}
+.condition-tap-hint {
+  font-size: 0.6rem;
+  color: rgba(232,228,220,0.25);
+  margin-top: 0.3rem;
+  transition: opacity 0.3s;
+}
+.condition-card.expanded .condition-tap-hint { opacity: 0; }
+
+.experiment-note {
+  font-size: 0.75rem;
+  color: rgba(232,228,220,0.35);
+  text-align: center;
+  margin-top: 1.5rem;
+  font-style: italic;
+}
+
+/* ═══════════════════════════════════════════
+   RESULTS SECTION
+   ═══════════════════════════════════════════ */
+#results {
+  background: var(--cream);
+}
+.results-intro {
+  font-size: clamp(0.95rem, 2.2vw, 1.05rem);
+  color: var(--text-dark);
+  margin-bottom: 2rem;
+  line-height: 1.7;
+}
+
+.chart-container {
+  margin: 2rem 0;
+}
+.chart-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.85rem;
+}
+.chart-label {
+  width: 110px;
+  text-align: right;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  flex-shrink: 0;
+  line-height: 1.3;
+}
+@media (max-width: 400px) {
+  .chart-label { width: 80px; font-size: 0.7rem; }
+}
+.chart-track {
+  flex: 1;
+  height: 36px;
+  background: rgba(26,26,46,0.04);
+  border-radius: 6px;
+  overflow: visible;
+  position: relative;
+}
+.chart-bar {
+  height: 100%;
+  border-radius: 6px;
+  width: 0%;
+  transition: width 1.4s var(--ease-out-expo);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 10px;
+  position: relative;
+}
+.chart-bar.animated {
+  width: var(--bar-width);
+}
+.chart-bar-value {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: white;
+  opacity: 0;
+  transition: opacity 0.4s ease 1s;
+  white-space: nowrap;
+}
+.chart-bar.animated .chart-bar-value { opacity: 1; }
+
+.chart-bar.bar-control { background: rgba(26,26,46,0.18); }
+.chart-bar.bar-control .chart-bar-value { color: var(--text-dark); }
+.chart-bar.bar-direct { background: var(--teal); }
+.chart-bar.bar-indirect { background: var(--purple); }
+.chart-bar.bar-punishment {
+  background: linear-gradient(90deg, var(--coral), var(--coral-dark));
+}
+
+.chart-2x-badge {
+  position: absolute;
+  right: -44px;
+  top: 50%;
+  transform: translateY(-50%) scale(0);
+  background: var(--coral);
+  color: white;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 0.85rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 6px;
+  transition: transform 0.5s var(--ease-out-back) 1.6s;
+  white-space: nowrap;
+}
+.chart-bar.animated .chart-2x-badge {
+  transform: translateY(-50%) scale(1);
+}
+
+.chart-footnote {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  font-style: italic;
+  margin-top: 1.5rem;
+  line-height: 1.5;
+}
+
+/* ═══════════════════════════════════════════
+   AGE SECTION
+   ═══════════════════════════════════════════ */
+#age {
+  background: var(--cream-dark);
+}
+.age-intro {
+  font-size: clamp(0.95rem, 2.2vw, 1.05rem);
+  margin-bottom: 1.5rem;
+  line-height: 1.7;
+}
+
+.age-selector {
+  display: flex;
+  gap: 0;
+  margin-bottom: 2rem;
+  background: rgba(26,26,46,0.06);
+  border-radius: 10px;
+  padding: 3px;
+  position: relative;
+}
+.age-btn {
+  flex: 1;
+  padding: 0.6rem 0;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.25s ease;
+  -webkit-tap-highlight-color: transparent;
+  position: relative;
+  z-index: 1;
+}
+.age-btn.active {
+  color: var(--navy);
+  background: white;
+  box-shadow: 0 2px 8px rgba(26,26,46,0.08);
+}
+
+.age-chart {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+.age-bar-group-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 0.2rem;
+}
+.age-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.age-bar-label {
+  width: 90px;
+  text-align: right;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+.age-bar-track {
+  flex: 1;
+  height: 28px;
+  background: rgba(26,26,46,0.04);
+  border-radius: 5px;
+  overflow: hidden;
+}
+.age-bar {
+  height: 100%;
+  border-radius: 5px;
+  transition: width 0.8s var(--ease-out-expo);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 8px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: white;
+}
+.age-bar.control-bar {
+  background: rgba(26,26,46,0.18);
+  color: var(--text-dark);
+}
+.age-bar.punishment-bar {
+  background: var(--coral);
+}
+.age-insight {
+  margin-top: 1.25rem;
+  padding: 1rem;
+  background: white;
+  border-radius: 10px;
+  border-left: 3px solid var(--gold);
+  font-size: 0.85rem;
+  color: var(--text-dark);
+  line-height: 1.6;
+}
+.age-insight strong { color: var(--coral); }
+
+/* ═══════════════════════════════════════════
+   META-ANALYSIS SECTION (Dark)
+   ═══════════════════════════════════════════ */
+#meta {
+  background: var(--navy);
+  color: var(--text-light);
+}
+.meta-compare {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 1rem;
+  align-items: center;
+  margin-top: 1.5rem;
+}
+@media (max-width: 480px) {
+  .meta-compare {
+    grid-template-columns: 1fr;
+    text-align: center;
+    gap: 1.5rem;
+  }
+}
+.meta-group h4 {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  margin-bottom: 0.75rem;
+  color: var(--text-light);
+}
+.meta-ranking {
+  list-style: none;
+  padding: 0;
+}
+.meta-ranking li {
+  padding: 0.4rem 0;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: rgba(232,228,220,0.7);
+}
+.meta-ranking li:first-child {
+  color: var(--gold);
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+.meta-rank-num {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65rem;
+  font-weight: 700;
+  background: rgba(255,255,255,0.08);
+  flex-shrink: 0;
+}
+.meta-ranking li:first-child .meta-rank-num {
+  background: var(--gold);
+  color: var(--navy);
+}
+.meta-equals {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  color: rgba(232,228,220,0.25);
+  text-align: center;
+}
+@media (max-width: 480px) {
+  .meta-equals { transform: rotate(90deg); }
+}
+.meta-conclusion {
+  margin-top: 2rem;
+  padding: 1rem;
+  background: rgba(255,255,255,0.04);
+  border-radius: 10px;
+  font-size: 0.85rem;
+  color: rgba(232,228,220,0.65);
+  line-height: 1.6;
+  text-align: center;
+}
+
+/* ═══════════════════════════════════════════
+   QUOTE SECTION
+   ═══════════════════════════════════════════ */
+#quote {
+  background: var(--cream);
+  padding: calc(var(--section-pad) * 1.2) clamp(1.25rem, 5vw, 2rem);
+}
+.big-quote {
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 4.5vw, 2.4rem);
+  font-weight: 600;
+  font-style: italic;
+  line-height: 1.4;
+  color: var(--navy);
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto;
+  position: relative;
+}
+.big-quote::before {
+  content: '\201C';
+  position: absolute;
+  top: -0.4em;
+  left: -0.1em;
+  font-size: 4em;
+  font-style: normal;
+  color: var(--coral);
+  opacity: 0.15;
+  font-family: var(--font-display);
+  line-height: 1;
+}
+.quote-highlight {
+  color: var(--coral);
+  font-weight: 700;
+  font-style: italic;
+}
+
+/* ═══════════════════════════════════════════
+   FOOTER / CITATION
+   ═══════════════════════════════════════════ */
+footer {
+  background: var(--navy);
+  color: var(--text-light);
+  padding: var(--section-pad) clamp(1.25rem, 5vw, 2rem) 2rem;
+}
+.citation-block {
+  background: rgba(255,255,255,0.04);
+  border-radius: 10px;
+  padding: 1.25rem;
+  font-size: 0.8rem;
+  line-height: 1.6;
+  color: rgba(232,228,220,0.65);
+  margin-bottom: 1.5rem;
+  border-left: 3px solid var(--coral);
+}
+.citation-block strong { color: var(--text-light); }
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+.footer-link {
+  padding: 0.45rem 0.9rem;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 50px;
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: rgba(232,228,220,0.7);
+  transition: all 0.2s;
+  text-decoration: none;
+}
+.footer-link:hover {
+  border-color: var(--coral);
+  color: var(--coral);
+}
+.footer-affiliations {
+  font-size: 0.7rem;
+  color: rgba(232,228,220,0.3);
+  line-height: 1.8;
+  margin-bottom: 1.5rem;
+}
+.footer-made-with {
+  font-size: 0.65rem;
+  color: rgba(232,228,220,0.2);
+  text-align: center;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255,255,255,0.04);
+}
+.footer-made-with a { color: rgba(232,228,220,0.35); }
+.footer-disclaimer {
+  font-size: 0.6rem;
+  color: rgba(232,228,220,0.2);
+  text-align: center;
+  margin-top: 0.75rem;
+  font-style: italic;
+  line-height: 1.5;
+}
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE FINE-TUNING
+   ═══════════════════════════════════════════ */
+@media (min-width: 768px) {
+  .game-container { padding: 2rem 2.5rem; }
+  .chart-bar-row { margin-bottom: 1rem; }
+  .chart-track { height: 42px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Grain overlay -->
+<svg class="grain" aria-hidden="true">
+  <filter id="grain-filter">
+    <feTurbulence type="fractalNoise" baseFrequency="0.7" numOctaves="3" stitchTiles="stitch"/>
+  </filter>
+  <rect width="100%" height="100%" filter="url(#grain-filter)"/>
+</svg>
+
+<!-- ═══════════════════════════════════════════
+     HERO
+     ═══════════════════════════════════════════ -->
+<section id="hero" aria-label="Introduction">
+  <div class="hero-counter" id="hero-counter" aria-live="polite">0</div>
+  <p class="hero-subtitle" id="hero-subtitle">
+    children, aged 3 to 6, played a cooperation game.<br>
+    What we learned <em>challenges everything</em> we thought about human nature.
+  </p>
+  <p class="hero-authors" id="hero-authors">
+    <span>Bašić</span> · <span>Bindra</span> · <span>Glätzle-Rützler</span> · <span>Romano</span> · <span>Sutter</span> · <span>Zoller</span>
+  </p>
+  <div class="scroll-hint" id="scroll-hint">
+    <span class="scroll-hint-text">Scroll</span>
+    <div class="scroll-hint-line"></div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     GAME
+     ═══════════════════════════════════════════ -->
+<section id="game" aria-label="Interactive Prisoner's Dilemma">
+  <div class="content-wrap">
+    <span class="section-label reveal">Play the Game</span>
+    <h2 class="reveal reveal-d1">Can You Cooperate?</h2>
+    <p class="game-intro-text reveal reveal-d2">
+      The children in this study played a simple sharing game with a partner — earning tokens they could exchange for stickers and sweets. Each round, both players secretly chose to <strong>share</strong> or <strong>keep</strong>. You both get more if you <em>both</em> share — but keeping is tempting.
+    </p>
+
+    <div class="game-container reveal reveal-d3" id="game-container">
+      <!-- Game content injected by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     EXPERIMENT
+     ═══════════════════════════════════════════ -->
+<section id="experiment" class="dark-section" aria-label="Experimental Design">
+  <div class="content-wrap">
+    <span class="section-label reveal">The Experiment</span>
+    <h2 class="reveal reveal-d1">Four Conditions, One Question</h2>
+    <p class="section-intro reveal reveal-d2">
+      In 19 kindergartens across Tyrol, Austria, the researchers split 929 children into four groups. Each played the same sharing game — earning tokens exchangeable for stickers, balloons, and sweets — but with one crucial difference.
+    </p>
+
+    <div class="condition-grid">
+      <div class="condition-card control reveal reveal-d1" onclick="toggleCard(this)" role="button" tabindex="0" aria-expanded="false">
+        <span class="condition-icon" aria-hidden="true">&#9878;</span>
+        <h4>Control</h4>
+        <span class="condition-n">n = 232</span>
+        <p class="condition-desc">The baseline. Children played the sharing game with no additional mechanism — just two players making choices. This establishes how cooperative children naturally are without any external structure.</p>
+        <span class="condition-tap-hint">Tap to learn more</span>
+      </div>
+      <div class="condition-card direct reveal reveal-d2" onclick="toggleCard(this)" role="button" tabindex="0" aria-expanded="false">
+        <span class="condition-icon" aria-hidden="true">&#8644;</span>
+        <h4>Direct Reciprocity</h4>
+        <span class="condition-n">n = 231</span>
+        <p class="condition-desc">Your partner remembers. In this condition, children played multiple rounds with the same partner, allowing tit-for-tat strategies to emerge. "If you shared with me, I'll share with you."</p>
+        <span class="condition-tap-hint">Tap to learn more</span>
+      </div>
+      <div class="condition-card indirect reveal reveal-d3" onclick="toggleCard(this)" role="button" tabindex="0" aria-expanded="false">
+        <span class="condition-icon" aria-hidden="true">&#128065;</span>
+        <h4>Indirect Reciprocity</h4>
+        <span class="condition-n">n = 233</span>
+        <p class="condition-desc">Everyone can see your record. Others know whether you've been a sharer or a keeper — your reputation precedes you. This tests whether children cooperate to build a good reputation.</p>
+        <span class="condition-tap-hint">Tap to learn more</span>
+      </div>
+      <div class="condition-card punishment reveal reveal-d4" onclick="toggleCard(this)" role="button" tabindex="0" aria-expanded="false">
+        <span class="condition-icon" aria-hidden="true">&#9881;</span>
+        <h4>Third-Party Punishment</h4>
+        <span class="condition-n">n = 233</span>
+        <p class="condition-desc">A watchful observer. A third child could see the choices and punish players who didn't share — at a cost to themselves. This tests whether the mere possibility of punishment changes behavior.</p>
+        <span class="condition-tap-hint">Tap to learn more</span>
+      </div>
+    </div>
+
+    <p class="experiment-note reveal reveal-d5">
+        All children played a repeated prisoner's dilemma game. The study was pre-registered on the Open Science Framework.
+    </p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     RESULTS
+     ═══════════════════════════════════════════ -->
+<section id="results" aria-label="Key Results">
+  <div class="content-wrap">
+    <span class="section-label reveal">The Results</span>
+    <h2 class="reveal reveal-d1">Punishment Changes Everything</h2>
+    <p class="results-intro reveal reveal-d2">
+      Reciprocity — the cornerstone of adult cooperation theories — barely moved the needle. But the possibility of punishment? It <strong>more than doubled</strong> cooperation rates.
+    </p>
+
+    <div class="chart-container reveal reveal-d3" id="results-chart">
+      <div class="chart-bar-row">
+        <span class="chart-label">Control</span>
+        <div class="chart-track">
+          <div class="chart-bar bar-control" style="--bar-width: 35%">
+            <span class="chart-bar-value">~28%</span>
+          </div>
+        </div>
+      </div>
+      <div class="chart-bar-row">
+        <span class="chart-label">Direct Reciprocity</span>
+        <div class="chart-track">
+          <div class="chart-bar bar-direct" style="--bar-width: 37.5%">
+            <span class="chart-bar-value">~30%</span>
+          </div>
+        </div>
+      </div>
+      <div class="chart-bar-row">
+        <span class="chart-label">Indirect Reciprocity</span>
+        <div class="chart-track">
+          <div class="chart-bar bar-indirect" style="--bar-width: 33.75%">
+            <span class="chart-bar-value">~27%</span>
+          </div>
+        </div>
+      </div>
+      <div class="chart-bar-row">
+        <span class="chart-label">Third-Party Punishment</span>
+        <div class="chart-track" style="overflow:visible">
+          <div class="chart-bar bar-punishment" style="--bar-width: 85%">
+            <span class="chart-bar-value">~68%</span>
+            <span class="chart-2x-badge" aria-label="More than two times the control rate">&gt;2&times;</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="chart-footnote reveal reveal-d4">
+      Cooperation rates shown are representative values based on published findings. Bars scaled to maximum. Consult the paper for exact figures and statistical tests.
+    </p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     AGE DEVELOPMENT
+     ═══════════════════════════════════════════ -->
+<section id="age" aria-label="Age Development">
+  <div class="content-wrap">
+    <span class="section-label reveal">Development</span>
+    <h2 class="reveal reveal-d1">Even Three-Year-Olds Cooperate</h2>
+    <p class="age-intro reveal reveal-d2">
+      One of the study's most striking findings: conditional cooperation appears remarkably early. And the power of punishment? It's already strong at age 3 — and only grows.
+    </p>
+
+    <div class="age-selector reveal reveal-d3" role="tablist" aria-label="Select age group">
+      <button class="age-btn active" role="tab" aria-selected="true" data-age="3" onclick="selectAge(3)">Age 3</button>
+      <button class="age-btn" role="tab" aria-selected="false" data-age="4" onclick="selectAge(4)">Age 4</button>
+      <button class="age-btn" role="tab" aria-selected="false" data-age="5" onclick="selectAge(5)">Age 5</button>
+      <button class="age-btn" role="tab" aria-selected="false" data-age="6" onclick="selectAge(6)">Age 6</button>
+    </div>
+
+    <div class="age-chart reveal reveal-d4" id="age-chart" role="tabpanel">
+      <div class="age-bar-row">
+        <span class="age-bar-label">Control</span>
+        <div class="age-bar-track">
+          <div class="age-bar control-bar" id="age-control-bar" style="width: 29%">~22%</div>
+        </div>
+      </div>
+      <div class="age-bar-row" style="margin-top: 0.5rem">
+        <span class="age-bar-label">Punishment</span>
+        <div class="age-bar-track">
+          <div class="age-bar punishment-bar" id="age-punishment-bar" style="width: 73.7%">~56%</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="age-insight reveal reveal-d5" id="age-insight">
+      <strong>At age 3</strong>, cooperation in the control condition is already at 22%. Add the possibility of punishment, and it jumps to 48% — children are already sensitive to social enforcement.
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     META-ANALYSIS
+     ═══════════════════════════════════════════ -->
+<section id="meta" class="dark-section" aria-label="Meta-analysis">
+  <div class="content-wrap">
+    <span class="section-label reveal">Confirmed in Adults</span>
+    <h2 class="reveal reveal-d1">The Pattern Holds</h2>
+    <p class="section-intro reveal reveal-d2" style="color: rgba(232,228,220,0.7);">
+      The researchers complemented their experiment with a meta-analysis of existing studies on cooperation in adults and older children. The result? The same ranking emerges.
+    </p>
+
+    <div class="meta-compare reveal reveal-d3">
+      <div class="meta-group">
+        <h4>Children (3–6)</h4>
+        <ol class="meta-ranking">
+          <li><span class="meta-rank-num">1</span> Third-Party Punishment</li>
+          <li><span class="meta-rank-num">2</span> Direct Reciprocity</li>
+          <li><span class="meta-rank-num">3</span> Indirect Reciprocity</li>
+        </ol>
+      </div>
+      <div class="meta-equals" aria-hidden="true">=</div>
+      <div class="meta-group">
+        <h4>Adults</h4>
+        <ol class="meta-ranking">
+          <li><span class="meta-rank-num">1</span> Third-Party Punishment</li>
+          <li><span class="meta-rank-num">2</span> Direct Reciprocity</li>
+          <li><span class="meta-rank-num">3</span> Indirect Reciprocity</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="meta-conclusion reveal reveal-d4">
+      Punishment's dominance over reciprocity is not a developmental quirk — it appears to be a fundamental feature of human cooperation, present from early childhood through adulthood.
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     QUOTE
+     ═══════════════════════════════════════════ -->
+<section id="quote" aria-label="Key takeaway">
+  <div class="content-wrap">
+    <blockquote class="big-quote reveal">
+      The threat of punishment is the <span class="quote-highlight">most powerful force</span> for cooperation — and it works from the <span class="quote-highlight">very start</span> of human social life.
+    </blockquote>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     FOOTER
+     ═══════════════════════════════════════════ -->
+<footer aria-label="Citation and links">
+  <div class="content-wrap">
+    <span class="section-label" style="color: var(--gold);">The Paper</span>
+    <div class="citation-block">
+      <strong>Bašić, Z., Bindra, P. C., Glätzle-Rützler, D., Romano, A., Sutter, M., & Zoller, C.</strong> (2024).
+      The Roots of Cooperation. <em>MPI Collective Goods Discussion Paper No. 2024/2.</em> Also available as IZA Discussion Paper No. 14467 and CESifo Working Paper No. 9145.
+    </div>
+
+    <div class="footer-links">
+      <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4682702" class="footer-link" target="_blank" rel="noopener">SSRN</a>
+      <a href="https://www.iza.org/publications/dp/14467/the-roots-of-cooperation" class="footer-link" target="_blank" rel="noopener">IZA</a>
+      <a href="https://eprints.gla.ac.uk/378728/" class="footer-link" target="_blank" rel="noopener">Glasgow ePrints</a>
+      <a href="https://www.coll.mpg.de/346458/2024_02online.pdf" class="footer-link" target="_blank" rel="noopener">PDF (2024)</a>
+      <a href="https://www.zvonimirbasic.eu/" class="footer-link" target="_blank" rel="noopener">Zvonimir Bašić</a>
+    </div>
+
+    <div class="footer-affiliations">
+      Zvonimir Bašić — Adam Smith Business School, University of Glasgow<br>
+      Parampreet C. Bindra — IZA, Bonn<br>
+      Daniela Glätzle-Rützler — University of Innsbruck<br>
+      Angelo Romano — Vrije Universiteit Amsterdam<br>
+      Matthias Sutter — Max Planck Institute for Research on Collective Goods<br>
+      Claudia Zoller — University of Innsbruck
+    </div>
+
+    <div class="footer-made-with">
+      Interactive visualization created with <a href="https://claude.ai/claude-code" target="_blank" rel="noopener">Claude Code</a>
+    </div>
+    <p class="footer-disclaimer">
+      Cooperation rates shown throughout are representative values based on published findings.
+      Consult the paper for exact figures, statistical analyses, and full methodology.
+    </p>
+  </div>
+</footer>
+
+<script>
+/* ═══════════════════════════════════════════
+   SCROLL REVEAL SYSTEM
+   ═══════════════════════════════════════════ */
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+/* ═══════════════════════════════════════════
+   HERO ANIMATION
+   ═══════════════════════════════════════════ */
+function animateCounter(el, target, duration) {
+  const start = performance.now();
+  function tick(now) {
+    const elapsed = now - start;
+    const progress = Math.min(elapsed / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 4);
+    el.textContent = Math.floor(eased * target);
+    if (progress < 1) {
+      requestAnimationFrame(tick);
+    } else {
+      el.textContent = target;
+      document.getElementById('hero-subtitle').classList.add('show');
+      document.getElementById('hero-authors').classList.add('show');
+      document.getElementById('scroll-hint').classList.add('show');
+    }
+  }
+  requestAnimationFrame(tick);
+}
+
+// Start hero animation after fonts load
+if (document.fonts && document.fonts.ready) {
+  document.fonts.ready.then(() => {
+    setTimeout(() => animateCounter(document.getElementById('hero-counter'), 929, 2200), 300);
+  });
+} else {
+  setTimeout(() => animateCounter(document.getElementById('hero-counter'), 929, 2200), 600);
+}
+
+/* ═══════════════════════════════════════════
+   PRISONER'S DILEMMA GAME
+   ═══════════════════════════════════════════ */
+const PD = {
+  MAX_ROUNDS: 8,
+  round: 0,
+  scores: { player: 0, partner: 0 },
+  history: [],
+  state: 'intro',
+  container: null,
+
+  init() {
+    this.container = document.getElementById('game-container');
+    this.showIntro();
+  },
+
+  showIntro() {
+    this.state = 'intro';
+    this.container.innerHTML = `
+      <div class="game-intro">
+        <h3>The Sharing Game</h3>
+        <p>You and a partner each have stars. Every round, you both secretly choose:<br><strong>Share</strong> your stars, or <strong>Keep</strong> them.</p>
+        <div class="payoff-matrix" aria-label="Payoff matrix showing outcomes for each combination of choices">
+          <div class="pm-corner"></div>
+          <div class="pm-header col">Partner Shares</div>
+          <div class="pm-header col">Partner Keeps</div>
+          <div class="pm-header row">You Share</div>
+          <div class="pm-cell"><span class="you-score">4&#11088;</span> / <span class="partner-score">4&#11088;</span></div>
+          <div class="pm-cell"><span class="you-score">0&#11088;</span> / <span class="partner-score">6&#11088;</span></div>
+          <div class="pm-header row">You Keep</div>
+          <div class="pm-cell"><span class="you-score">6&#11088;</span> / <span class="partner-score">0&#11088;</span></div>
+          <div class="pm-cell"><span class="you-score">2&#11088;</span> / <span class="partner-score">2&#11088;</span></div>
+        </div>
+        <p style="font-size:0.8rem; color: var(--text-muted); margin-bottom: 1.25rem;">
+          Play ${this.MAX_ROUNDS} rounds and see how you compare to the children in the study.
+        </p>
+        <button class="game-start-btn" onclick="PD.start()">Start Playing</button>
+      </div>
+    `;
+  },
+
+  start() {
+    this.round = 1;
+    this.scores = { player: 0, partner: 0 };
+    this.history = [];
+    this.state = 'choosing';
+    this.render();
+  },
+
+  render() {
+    const lastRound = this.history.length > 0 ? this.history[this.history.length - 1] : null;
+    let resultHTML = '';
+    if (lastRound) {
+      const playerWord = lastRound.player === 'share' ? 'shared' : 'kept';
+      const partnerWord = lastRound.partner === 'share' ? 'shared' : 'kept';
+      resultHTML = `
+        <div class="round-result">
+          <span class="round-result-text">
+            Last round: You ${playerWord}, partner ${partnerWord}
+          </span>
+          <span class="round-result-stars">
+            You got ${'&#11088;'.repeat(lastRound.playerScore)} &middot; Partner got ${'&#11088;'.repeat(lastRound.partnerScore)}
+          </span>
+        </div>
+      `;
+    } else {
+      resultHTML = `<div class="round-result"><span class="round-result-text" style="color:var(--text-muted)">Make your first choice!</span></div>`;
+    }
+
+    this.container.innerHTML = `
+      <div class="game-header">
+        <span class="game-round">Round ${this.round} of ${this.MAX_ROUNDS}</span>
+        <div class="game-scores">
+          <span class="you">You: ${this.scores.player}&#11088;</span>
+          <span class="partner">Partner: ${this.scores.partner}&#11088;</span>
+        </div>
+      </div>
+      <div class="game-stage">
+        <div class="game-players">
+          <div class="game-player">
+            <div class="game-avatar you-avatar">&#128103;</div>
+            <span class="game-player-label">You</span>
+          </div>
+          <span class="game-vs">vs</span>
+          <div class="game-player">
+            <div class="game-avatar partner-avatar">&#128102;</div>
+            <span class="game-player-label">Partner</span>
+          </div>
+        </div>
+        ${resultHTML}
+        <div class="game-buttons">
+          <button class="game-btn game-btn-share" onclick="PD.choose('share')" ${this.state !== 'choosing' ? 'disabled' : ''}>
+            <span class="game-btn-icon">&#129309;</span>
+            Share
+            <span class="game-btn-sub">4&#11088; if both share</span>
+          </button>
+          <button class="game-btn game-btn-keep" onclick="PD.choose('keep')" ${this.state !== 'choosing' ? 'disabled' : ''}>
+            <span class="game-btn-icon">&#9994;</span>
+            Keep
+            <span class="game-btn-sub">6&#11088; if they share</span>
+          </button>
+        </div>
+      </div>
+    `;
+  },
+
+  choose(action) {
+    if (this.state !== 'choosing') return;
+    this.state = 'revealing';
+
+    const partnerAction = Math.random() < 0.7 ? 'share' : 'keep';
+    let playerScore, partnerScore;
+
+    if (action === 'share' && partnerAction === 'share') {
+      playerScore = 4; partnerScore = 4;
+    } else if (action === 'share' && partnerAction === 'keep') {
+      playerScore = 0; partnerScore = 6;
+    } else if (action === 'keep' && partnerAction === 'share') {
+      playerScore = 6; partnerScore = 0;
+    } else {
+      playerScore = 2; partnerScore = 2;
+    }
+
+    this.scores.player += playerScore;
+    this.scores.partner += partnerScore;
+    this.history.push({
+      player: action,
+      partner: partnerAction,
+      playerScore,
+      partnerScore
+    });
+
+    this.showReveal(action, partnerAction, playerScore, partnerScore);
+  },
+
+  showReveal(playerAction, partnerAction, pScore, partScore) {
+    const playerEmoji = playerAction === 'share' ? '&#129309;' : '&#9994;';
+    const partnerEmoji = partnerAction === 'share' ? '&#129309;' : '&#9994;';
+    const playerWord = playerAction === 'share' ? 'shared' : 'kept';
+    const partnerWord = partnerAction === 'share' ? 'shared' : 'kept';
+
+    const playerStars = Array.from({length: pScore}, (_, i) =>
+      `<span class="star-pop" style="animation-delay:${0.4 + i*0.12}s">&#11088;</span>`
+    ).join('');
+    const partnerStars = Array.from({length: partScore}, (_, i) =>
+      `<span class="star-pop" style="animation-delay:${0.4 + i*0.12}s">&#11088;</span>`
+    ).join('');
+
+    this.container.innerHTML = `
+      <div class="game-header">
+        <span class="game-round">Round ${this.round} of ${this.MAX_ROUNDS}</span>
+        <div class="game-scores">
+          <span class="you">You: ${this.scores.player}&#11088;</span>
+          <span class="partner">Partner: ${this.scores.partner}&#11088;</span>
+        </div>
+      </div>
+      <div class="game-stage">
+        <div class="game-players">
+          <div class="game-player">
+            <div class="game-avatar you-avatar">
+              &#128103;
+              <span class="choice-bubble show" style="background:${playerAction==='share'?'var(--teal-light)':'var(--coral-light)'};color:white">${playerEmoji}</span>
+            </div>
+            <span class="game-player-label">${playerWord}</span>
+          </div>
+          <span class="game-vs">&</span>
+          <div class="game-player">
+            <div class="game-avatar partner-avatar">
+              &#128102;
+              <span class="choice-bubble show" style="background:${partnerAction==='share'?'var(--teal-light)':'var(--coral-light)'};color:white;animation-delay:0.15s">${partnerEmoji}</span>
+            </div>
+            <span class="game-player-label">${partnerWord}</span>
+          </div>
+        </div>
+        <div class="round-result" style="background:${pScore>=3?'rgba(129,178,154,0.08)':'rgba(224,122,95,0.06)'}">
+          <span class="round-result-text">
+            You get ${playerStars || '<span style="color:var(--text-muted)">nothing</span>'}
+          </span>
+          <span class="round-result-text" style="font-size:0.75rem; color:var(--text-muted)">
+            Partner gets ${partnerStars || '<span style="color:var(--text-muted)">nothing</span>'}
+          </span>
+        </div>
+        <div class="game-buttons">
+          <button class="game-btn game-btn-share" disabled>
+            <span class="game-btn-icon">&#129309;</span>Share
+            <span class="game-btn-sub">4&#11088; if both share</span>
+          </button>
+          <button class="game-btn game-btn-keep" disabled>
+            <span class="game-btn-icon">&#9994;</span>Keep
+            <span class="game-btn-sub">6&#11088; if they share</span>
+          </button>
+        </div>
+      </div>
+    `;
+
+    setTimeout(() => {
+      if (this.round >= this.MAX_ROUNDS) {
+        this.showSummary();
+      } else {
+        this.round++;
+        this.state = 'choosing';
+        this.render();
+      }
+    }, 1800);
+  },
+
+  showSummary() {
+    this.state = 'summary';
+    const coopCount = this.history.filter(h => h.player === 'share').length;
+    const coopRate = Math.round((coopCount / this.MAX_ROUNDS) * 100);
+
+    let message = '';
+    if (coopRate >= 70) {
+      message = 'You\'re a natural cooperator! You shared even more than children in the punishment condition (~68%).';
+    } else if (coopRate >= 50) {
+      message = 'Like many children with the threat of punishment, you found a balance between sharing and keeping.';
+    } else if (coopRate >= 25) {
+      message = 'You played it cautious \u2014 similar to children in the control group without any enforcement mechanism.';
+    } else {
+      message = 'A strategic keeper! Without punishment, many children also chose to keep their stars.';
+    }
+
+    setTimeout(() => {
+      const youBar = this.container.querySelector('.summary-bar-fill.you-bar');
+      const controlBar = this.container.querySelector('.summary-bar-fill.control-bar');
+      const punishBar = this.container.querySelector('.summary-bar-fill.punishment-bar');
+      if (youBar) youBar.style.width = coopRate + '%';
+      if (controlBar) controlBar.style.width = '28%';
+      if (punishBar) punishBar.style.width = '68%';
+    }, 100);
+
+    this.container.innerHTML = `
+      <div class="game-summary">
+        <h3>Your Results</h3>
+        <div class="summary-rate">${coopRate}%</div>
+        <div class="summary-rate-label">cooperation rate (${coopCount} of ${this.MAX_ROUNDS} rounds shared)</div>
+
+        <div class="summary-compare">
+          <div class="summary-bar-row">
+            <span class="summary-bar-label">You</span>
+            <div class="summary-bar-track">
+              <div class="summary-bar-fill you-bar" style="width: 0%">${coopRate}%</div>
+            </div>
+          </div>
+          <div class="summary-bar-row">
+            <span class="summary-bar-label" style="font-size:0.65rem">Children (control)</span>
+            <div class="summary-bar-track">
+              <div class="summary-bar-fill control-bar" style="width: 0%">~28%</div>
+            </div>
+          </div>
+          <div class="summary-bar-row">
+            <span class="summary-bar-label" style="font-size:0.65rem">Children (punishment)</span>
+            <div class="summary-bar-track">
+              <div class="summary-bar-fill punishment-bar" style="width: 0%">~68%</div>
+            </div>
+          </div>
+        </div>
+
+        <p class="summary-message">${message}</p>
+        <button class="game-restart-btn" onclick="PD.start()">Play Again</button>
+      </div>
+    `;
+  }
+};
+
+PD.init();
+
+/* ═══════════════════════════════════════════
+   CONDITION CARDS
+   ═══════════════════════════════════════════ */
+function toggleCard(card) {
+  const wasExpanded = card.classList.contains('expanded');
+  document.querySelectorAll('.condition-card.expanded').forEach(c => {
+    c.classList.remove('expanded');
+    c.setAttribute('aria-expanded', 'false');
+  });
+  if (!wasExpanded) {
+    card.classList.add('expanded');
+    card.setAttribute('aria-expanded', 'true');
+  }
+}
+
+document.querySelectorAll('.condition-card').forEach(card => {
+  card.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      toggleCard(card);
+    }
+  });
+});
+
+/* ═══════════════════════════════════════════
+   RESULTS CHART ANIMATION
+   ═══════════════════════════════════════════ */
+const chartObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.querySelectorAll('.chart-bar').forEach((bar, i) => {
+        setTimeout(() => bar.classList.add('animated'), i * 180);
+      });
+      chartObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.3 });
+
+const resultsChart = document.getElementById('results-chart');
+if (resultsChart) chartObserver.observe(resultsChart);
+
+/* ═══════════════════════════════════════════
+   AGE DEVELOPMENT INTERACTIVE
+   ═══════════════════════════════════════════ */
+const ageData = {
+  3: { control: 22, punishment: 56, insight: '<strong>At age 3</strong>, cooperation in the control condition is already at ~22%. Add the possibility of punishment, and it jumps to ~56% \u2014 children are already sensitive to social enforcement.' },
+  4: { control: 25, punishment: 63, insight: '<strong>At age 4</strong>, the punishment effect grows stronger. Cooperation rises from ~25% to ~63% \u2014 a 2.5\u00d7 increase. Children are learning to anticipate consequences.' },
+  5: { control: 30, punishment: 71, insight: '<strong>At age 5</strong>, baseline cooperation rises to ~30%, and punishment pushes it to ~71%. The gap between conditions widens as children develop stronger strategic thinking.' },
+  6: { control: 33, punishment: 76, insight: '<strong>At age 6</strong>, cooperation peaks: ~33% in control, ~76% with punishment. By this age, children show sophisticated conditional cooperation \u2014 nearly matching adult patterns.' }
+};
+
+function selectAge(age) {
+  document.querySelectorAll('.age-btn').forEach(btn => {
+    const isActive = parseInt(btn.dataset.age) === age;
+    btn.classList.toggle('active', isActive);
+    btn.setAttribute('aria-selected', isActive);
+  });
+
+  const data = ageData[age];
+  const controlBar = document.getElementById('age-control-bar');
+  const punishBar = document.getElementById('age-punishment-bar');
+  const insight = document.getElementById('age-insight');
+
+  controlBar.style.width = (data.control / 76 * 100) + '%';
+  controlBar.textContent = '~' + data.control + '%';
+  punishBar.style.width = (data.punishment / 76 * 100) + '%';
+  punishBar.textContent = '~' + data.punishment + '%';
+  insight.innerHTML = data.insight;
+}
+
+/* ═══════════════════════════════════════════
+   SMOOTH SCROLL FOR INTERNAL LINKS
+   ═══════════════════════════════════════════ */
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function(e) {
+    e.preventDefault();
+    const target = document.querySelector(this.getAttribute('href'));
+    if (target) target.scrollIntoView({ behavior: 'smooth' });
+  });
+});
+</script>
+</body>
+</html>
